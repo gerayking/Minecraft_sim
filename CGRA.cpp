@@ -44,7 +44,7 @@ CGRA::CGRA(int sizex,int sizey) {
 void CGRA::run() {
 
     while(1){
-        // TODO::condition need re considerate, for example cycle <= require_cycle
+        // TODO::condition need re-considerate, for example cycle <= require_cycle
         for(int i=0;i<sizeX;i++){
             for(int j=0;j<sizeY;j++){
                 tiles[i][j].execute();
