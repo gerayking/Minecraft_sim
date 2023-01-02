@@ -44,13 +44,13 @@ void CGRA::parseInsFile(std::string filename) {
     int cycle = 0;
     while(getline(insfile,line)){
         cycle = stoi(line);
-        //      std::cout << cycle << std::endl;
+//              std::cout << cycle << std::endl;
        long ins = 0;
         for(int i=0; i< this->sizeX;i++) {
             for (int j = 0; j < this->sizeY; j++) {
                 getline(insfile,line);
                 ins = stol(line,0,2);
-//                std::cout  <<ins << std::endl;
+                std::cout  <<line << std::endl<<i<<" "<<j<<"\n";
                 tiles[i][j].setCMEM(ins,cycle);
             }
         }
@@ -70,6 +70,8 @@ CGRA::CGRA(int sizex,int sizey) {
     // classify petype
     for(int i=0;i<sizex;i++){
         for(int j=0;j<sizey;j++){
+            tiles[i][j].x = i;
+            tiles[i][j].y = j;
             if(j==0){
                 tiles[i][j].peType = MPE;
                 tiles[i][j].DRAM = &this->dram[i];
@@ -91,7 +93,6 @@ CGRA::CGRA(int sizex,int sizey) {
 }
 
 void CGRA::run() {
-
     while(1){
         // TODO::condition need re-considerate, for example cycle <= require_cycle
         for(int i=0;i<sizeX;i++){

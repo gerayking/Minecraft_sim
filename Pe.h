@@ -20,6 +20,7 @@ public:
     dataType operand1,operand2,ALUTemp,outTemp,memData;
     insType ins,pc;// pc : address of instruction
     insType insBuffer[insLimit]; // instruction buffer;
+    int x,y;
     void getOperand(dataType &operand,int sel);
     void recvData();
     void writeback();

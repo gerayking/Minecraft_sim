@@ -4,7 +4,9 @@
 
 #include "Pe.h"
 
-Pe::Pe() {}
+Pe::Pe() {
+    pc = 0;
+}
 Pe::Pe(int peType, std::map<addrType,dataType>*DRAM) {
     this->DRAM = DRAM;
     this->peType = peType;
@@ -42,6 +44,7 @@ void Pe::recvData() {
 }
 void Pe::execute() {
     ins = insBuffer[pc++];
+    std::cout <<"x : "<<x<<" y : "<<y<< " ins: " << std::bitset<32>(this->ins) << "\n";
     // mux
     recvData();
     // alu
@@ -77,8 +80,14 @@ void Pe::execute() {
         case CGT:
             ALUTemp = (operand1 > operand2);
             break;
+        case LOAD:
+            break;
+        case STORE:
+            break;
+        case NOP:
+            break;
         default:
-            throw "opcode error";
+            throw "opcode error ";
     }
     // lsu
     if(peType == MPE){
@@ -124,11 +133,10 @@ void Pe::setCMEM(long ins, int cycle){
 }
 
 void Pe::printExeInfo() {
-    std::cout << "-----------------------------------------------------" << "pc : " << pc - 1 << "-----------------------------------------------------";
-    std::cout << "pc : " << this->pc - 1 << " ins: " << this->ins << "\n";
+    std::cout << "-----------------------------------------------------" << "pc : " << pc - 1 << "-----------------------------------------------------"<<"\n";
     std::cout << "operand1 : " << operand1 << " operand2 : " << operand2 << "\n";
     std::cout << "aluTemp : " << ALUTemp << " memData : " << memData << " outTemp :" << outTemp << "\n";
     std::cout << "rf1 :" << std::bitset<32>(rf1) << " rf2 :" << std::bitset<32>(rf2) << " rf3 :" << std::bitset<32>(rf3)
-      << " rf4 :" << std::bitset<32>(rf4) << "rf5 :" << std::bitset<32>(rf5);
+      << " rf4 :" << std::bitset<32>(rf4) << " rf5 :" << std::bitset<32>(rf5);
     std::cout << std::endl;
 }

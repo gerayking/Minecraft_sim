@@ -27,6 +27,7 @@
 #define CMP   0b01011
 #define CLT   0b01100
 #define CGT   0b01101
+#define NOP   0b11111
 
 
 #define dataType int

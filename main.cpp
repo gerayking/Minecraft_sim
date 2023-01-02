@@ -10,5 +10,4 @@ int main() {
     cgrainstance.parseMemFile(memfile); // 解析数据文件
     cout << "init finish.." << endl;
     cgrainstance.run(); // 运行
-
 }
