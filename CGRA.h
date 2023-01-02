@@ -19,6 +19,7 @@ public:
     Pe **tiles;
     int sizeX,sizeY;
     std::map<addrType,dataType>dram[4];
+    void printTileLayout();
 };
 
 

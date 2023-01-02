@@ -6,6 +6,10 @@
 
 Pe::Pe() {
     pc = 0;
+    for(int i=0;i<insLimit;i++){
+        insBuffer[i]=0;
+    }
+    rf1=rf2=rf3=rf4=rf5=0;
 }
 Pe::Pe(int peType, std::map<addrType,dataType>*DRAM) {
     this->DRAM = DRAM;
@@ -35,6 +39,7 @@ void Pe::getOperand(int &operand,int sel) {
             operand = SELA(ins);
             break;
         default:
+            std::cout << " ***** sel: " << sel << std::endl;
             throw "SELA error!";
     }
 }
@@ -46,9 +51,9 @@ void Pe::execute() {
     ins = insBuffer[pc++];
     std::cout <<"x : "<<x<<" y : "<<y<< " ins: " << std::bitset<32>(this->ins) << "\n";
     // mux
-    recvData();
+    if(OPCODE(ins)!=NOP)recvData();
     // alu
-    std::cout << OPCODE(ins) << std::endl;
+ //   std::cout << OPCODE(ins) << std::endl;
     switch (OPCODE(ins)) {
         case ADD:
             ALUTemp = operand1 + operand2;
@@ -87,7 +92,8 @@ void Pe::execute() {
         case NOP:
             break;
         default:
-            throw "opcode error ";
+    //        throw "opcode error";
+            std::cout << "******* opcode: default : " <<OPCODE(ins) <<  std::endl;
     }
     // lsu
     if(peType == MPE){
@@ -104,8 +110,9 @@ void Pe::execute() {
         }else{
             outTemp = ALUTemp;
         }
+    }else{
+        outTemp = ALUTemp;
     }
-    writeback();
 }
 void Pe::writeback() {
     switch (SELOUT(ins)) {
@@ -128,15 +135,20 @@ void Pe::writeback() {
 }
 
 void Pe::setCMEM(long ins, int cycle){
+    if(cycle==4){
+        std::cout<<cycle;
+    }
     insBuffer[cycle - 1] = ins;
-//    std::cout << "write ins " << insBuffer[cycle - 1] << std::endl;
 }
 
 void Pe::printExeInfo() {
     std::cout << "-----------------------------------------------------" << "pc : " << pc - 1 << "-----------------------------------------------------"<<"\n";
+    std::cout<<"x :"<<x<<" y: "<<y<<" ins :"<<std::bitset<32>(ins)<<"\n";
     std::cout << "operand1 : " << operand1 << " operand2 : " << operand2 << "\n";
     std::cout << "aluTemp : " << ALUTemp << " memData : " << memData << " outTemp :" << outTemp << "\n";
-    std::cout << "rf1 :" << std::bitset<32>(rf1) << " rf2 :" << std::bitset<32>(rf2) << " rf3 :" << std::bitset<32>(rf3)
-      << " rf4 :" << std::bitset<32>(rf4) << " rf5 :" << std::bitset<32>(rf5);
+    std::cout << "rf1 :" << rf1 << " rf2 :" << rf2 << " rf3 :" << rf3
+              << " rf4 :" << rf4 << " rf5 :" << rf5;
+//    std::cout << "rf1 :" << std::bitset<32>(rf1) << " rf2 :" << std::bitset<32>(rf2) << " rf3 :" << std::bitset<32>(rf3)
+//      << " rf4 :" << std::bitset<32>(rf4) << " rf5 :" << std::bitset<32>(rf5);
     std::cout << std::endl;
 }
