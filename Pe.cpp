@@ -41,11 +41,11 @@ void Pe::recvData() {
     getOperand(this->operand2,SELB(ins));
 }
 void Pe::execute() {
-    pc = pc + 1;
-    ins = insBuffer[pc];
+    ins = insBuffer[pc++];
     // mux
     recvData();
     // alu
+    std::cout << OPCODE(ins) << std::endl;
     switch (OPCODE(ins)) {
         case ADD:
             ALUTemp = operand1 + operand2;
@@ -117,13 +117,18 @@ void Pe::writeback() {
             break;
     }
 }
-void Pe::printExeInfo(std::iostream f) {
-    f << "-----------------------------------------------------" << "pc : " << pc
-      << "-----------------------------------------------------";
-    f << "pc : " << this->pc << " ins: " << this->ins << "\n";
-    f << "operand1 : " << operand1 << " operand2 : " << operand2 << "\n";
-    f << "aluTemp : " << ALUTemp << " memData : " << memData << " outTemp :" << outTemp << "\n";
-    f << "rf1 :" << std::bitset<32>(rf1) << " rf2 :" << std::bitset<32>(rf2) << " rf3 :" << std::bitset<32>(rf3)
+
+void Pe::setCMEM(long ins, int cycle){
+    insBuffer[cycle - 1] = ins;
+//    std::cout << "write ins " << insBuffer[cycle - 1] << std::endl;
+}
+
+void Pe::printExeInfo() {
+    std::cout << "-----------------------------------------------------" << "pc : " << pc - 1 << "-----------------------------------------------------";
+    std::cout << "pc : " << this->pc - 1 << " ins: " << this->ins << "\n";
+    std::cout << "operand1 : " << operand1 << " operand2 : " << operand2 << "\n";
+    std::cout << "aluTemp : " << ALUTemp << " memData : " << memData << " outTemp :" << outTemp << "\n";
+    std::cout << "rf1 :" << std::bitset<32>(rf1) << " rf2 :" << std::bitset<32>(rf2) << " rf3 :" << std::bitset<32>(rf3)
       << " rf4 :" << std::bitset<32>(rf4) << "rf5 :" << std::bitset<32>(rf5);
-    f << std::endl;
+    std::cout << std::endl;
 }
