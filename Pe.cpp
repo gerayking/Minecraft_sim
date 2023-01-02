@@ -12,6 +12,7 @@ Pe::Pe(int peType, std::map<addrType,dataType>*DRAM) {
 void Pe::getOperand(int &operand,int sel) {
     switch (sel) {
         case 0:
+            std::cout << "case 0 " << std::endl;
             operand = this->inE->rf3;
             break;
         case 1:
@@ -33,6 +34,7 @@ void Pe::getOperand(int &operand,int sel) {
             operand = SELA(ins);
             break;
         default:
+            std::cout << " ***** sel: " << sel << std::endl;
             throw "SELA error!";
     }
 }
@@ -45,7 +47,7 @@ void Pe::execute() {
     // mux
     recvData();
     // alu
-    std::cout << OPCODE(ins) << std::endl;
+ //   std::cout << OPCODE(ins) << std::endl;
     switch (OPCODE(ins)) {
         case ADD:
             ALUTemp = operand1 + operand2;
@@ -77,8 +79,14 @@ void Pe::execute() {
         case CGT:
             ALUTemp = (operand1 > operand2);
             break;
+        case LOAD:
+            break;
+        case STORE:
+            break;
         default:
-            throw "opcode error";
+    //        throw "opcode error";
+            std::cout << "******* opcode: default : " <<OPCODE(ins) <<  std::endl;
+
     }
     // lsu
     if(peType == MPE){
@@ -124,11 +132,11 @@ void Pe::setCMEM(long ins, int cycle){
 }
 
 void Pe::printExeInfo() {
-    std::cout << "-----------------------------------------------------" << "pc : " << pc - 1 << "-----------------------------------------------------";
+//    std::cout << "-----------------------------------------------------" << "pc : " << pc - 1 << "-----------------------------------------------------";
     std::cout << "pc : " << this->pc - 1 << " ins: " << this->ins << "\n";
     std::cout << "operand1 : " << operand1 << " operand2 : " << operand2 << "\n";
     std::cout << "aluTemp : " << ALUTemp << " memData : " << memData << " outTemp :" << outTemp << "\n";
     std::cout << "rf1 :" << std::bitset<32>(rf1) << " rf2 :" << std::bitset<32>(rf2) << " rf3 :" << std::bitset<32>(rf3)
-      << " rf4 :" << std::bitset<32>(rf4) << "rf5 :" << std::bitset<32>(rf5);
+      << " rf4 :" << std::bitset<32>(rf4) << " rf5 :" << std::bitset<32>(rf5);
     std::cout << std::endl;
 }

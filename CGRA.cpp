@@ -8,6 +8,10 @@
 #include "string"
 #define LOG
 using namespace std;
+
+
+
+
 void CGRA::parseMemFile(string filename) {
     // TODO :: parse Memfile
     ifstream file(filename);
@@ -68,6 +72,16 @@ CGRA::CGRA(int sizex,int sizey) {
         tiles[i] = new Pe[sizey];
     }
     // classify petype
+    int id = 0;
+    for(int i = 0; i < sizex; i++){
+        for(int j = 0; j < sizey; j++){
+            tiles[i][j].id = id++;
+            tiles[i][j].inE = NULL;
+            tiles[i][j].inN = NULL;
+            tiles[i][j].inW = NULL;
+            tiles[i][j].inS = NULL;
+        }
+    }
     for(int i=0;i<sizex;i++){
         for(int j=0;j<sizey;j++){
             if(j==0){
@@ -80,6 +94,24 @@ CGRA::CGRA(int sizex,int sizey) {
         }
     }
     //connect pe
+
+    for(int i=0;i<sizex;i++){
+        for(int j=0;j<sizey;j++){
+            if(j != 0){
+                tiles[i][j].inW = &tiles[i][j-1];
+            }
+            if(j != sizey - 1){
+                tiles[i][j].inE = &tiles[i][j+1];
+            }
+            if(i != 0){
+                tiles[i][j].inN = &tiles[i-1][j];
+            }
+            if(i != sizeX - 1){
+                tiles[i][j].inS = &tiles[i+1][j];
+            }
+        }
+    }
+    /*
     for(int i=0;i<sizex;i++){
         for(int j=0;j<sizey;j++){
             if(i!=0)tiles[i][j].inN=&tiles[i-1][j];
@@ -88,16 +120,53 @@ CGRA::CGRA(int sizex,int sizey) {
             if(j!=sizey-1)tiles[i][j].inS=&tiles[i][j+1];
         }
     }
+     */
+}
+
+void CGRA::printTileLayout(){
+    for(int i = 0; i < sizeX; i++){
+        for(int j = 0; j < sizeY; j++){
+//            std::cout << tiles[i][j].id << std::endl;
+            cout << i << ", " << j << ": " << tiles[i][j].id << " ";
+
+            if(tiles[i][j].inN){
+                cout << " n " << tiles[i][j].inN->id;
+            }else{
+                cout << " n null";
+            }
+            if(tiles[i][j].inS){
+                cout << " s "<<tiles[i][j].inS->id;
+            }else{
+                cout << " s null";
+            }
+            if(tiles[i][j].inW){
+                cout << " w "<<tiles[i][j].inW->id;
+            }else{
+                cout << " w null";
+            }
+            if(tiles[i][j].inE){
+                cout << " e "<<tiles[i][j].inE->id;
+            }else{
+                cout << " e null";
+            }
+            cout << endl;
+        }
+    }
 }
 
 void CGRA::run() {
-
+    int cycle = 0;
     while(1){
         // TODO::condition need re considerate, for example cycle <= require_cycle
+        std::cout << "------------------------- cycle : " << cycle ++  << " -------------------------- -------------------------- " << std::endl;
+        int index = 0;
         for(int i=0;i<sizeX;i++){
             for(int j=0;j<sizeY;j++){
+                std::cout << "PE : [ " << i << ", " << j << " ]" << std::endl;
+
                 tiles[i][j].execute();
 #ifdef LOG
+//                std::cout << "\t ins:" << tiles[i][j].insBuffer[cycle] << std::endl;
                 tiles[i][j].printExeInfo();
 #endif
             }
@@ -118,7 +187,7 @@ void CGRA::printCMEM(){
 }
 
 void CGRA::printDRAM(){
-    for(int i = 0 ; i < 4; i++){
+    for(int i = 0 ; i < this->sizeX; i++){
         auto DRAM_map = dram[i];
         std::cout << "------------------ index: " << i << "--------------------" << std::endl;
         for (auto it=DRAM_map.begin(); it!=DRAM_map.end(); ++it)
@@ -127,3 +196,4 @@ void CGRA::printDRAM(){
     }
 
 }
+
