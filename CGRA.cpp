@@ -21,16 +21,16 @@ void CGRA::parseMemFile(string filename) {
         int index = stoi(line);
         getline(file,line);
         istringstream iss(line);
-    //    cout << " ------------------- index: " << index << " -----------------" << endl;
+//        cout << " ------------------- index: " << index << " -----------------" << endl;
         for(int i = 0; i < 6; i++){
             int tmp = 0;
             iss >> tmp;
 //            cout << tmp << endl;
-            dram.insert(pair(addr++,tmp));
+            dram[index].insert(pair(i,tmp));
         }
     }
-   // printDRAM();
-   // exit(0);
+//    printDRAM();
+//   exit(0);
 }
 void CGRA::parseInsFile(std::string filename) {
     // TODO :: parse Insfile
@@ -61,8 +61,8 @@ void CGRA::parseInsFile(std::string filename) {
 
 }
 CGRA::CGRA(int sizex,int sizey) {
-    this->sizeX=sizex;
-    this->sizeY=sizey;
+    sizeX = sizex;
+    sizeY = sizey;
     tiles = new Pe * [sizex];
     for(int i=0;i<sizex;i++){
         tiles[i] = new Pe[sizey];
@@ -72,7 +72,7 @@ CGRA::CGRA(int sizex,int sizey) {
         for(int j=0;j<sizey;j++){
             if(j==0){
                 tiles[i][j].peType = MPE;
-                tiles[i][j].DRAM = &this->dram;
+                tiles[i][j].DRAM = &this->dram[i];
             }else{
                 tiles[i][j].peType = NPE;
                 tiles[i][j].DRAM = nullptr;
@@ -108,8 +108,8 @@ void CGRA::run() {
 void CGRA::printCMEM(){
     for(int cycle = 1; cycle < 24; cycle++){
         cout << cycle << endl;
-        for(int i = 0; i < this->sizeX;i++){
-            for(int j = 0; j < this->sizeY;j++){
+        for(int i = 0; i < sizeX;i++){
+            for(int j = 0; j < sizeY;j++){
                 cout << tiles[i][j].insBuffer[cycle-1] << endl;
             }
         }
@@ -118,8 +118,12 @@ void CGRA::printCMEM(){
 }
 
 void CGRA::printDRAM(){
-    auto DRAM_map = dram;
-    for (auto it=DRAM_map.begin(); it!=DRAM_map.end(); ++it)
-        std::cout << it->first << " => " << it->second << '\n';
+    for(int i = 0 ; i < 4; i++){
+        auto DRAM_map = dram[i];
+        std::cout << "------------------ index: " << i << "--------------------" << std::endl;
+        for (auto it=DRAM_map.begin(); it!=DRAM_map.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+
+    }
 
 }
