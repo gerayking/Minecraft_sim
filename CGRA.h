@@ -10,11 +10,13 @@
 
 class CGRA {
 public:
-    void parseInsFile();
-    void parseMemFile();
+    void parseInsFile(std::string filename);
+    void parseMemFile(std::string filename);
     CGRA(int sizex,int sizey);
     std::map<addrType,dataType>dram;
     void run();
+    void printCMEM();
+    void printDRAM();
 private:
     Pe **tiles;
     int sizeX,sizeY;

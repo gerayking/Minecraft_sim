@@ -30,6 +30,6 @@
 
 
 #define dataType int
-#define insType int
+#define insType long
 #define insLimit 64
 #define addrType int

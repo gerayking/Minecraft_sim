@@ -15,8 +15,7 @@
 #define NPE 0
 #define MPE 1
 class Pe {
-
-private:
+public:
     dataType rf1,rf2,rf3,rf4,rf5; // 5 register
     dataType operand1,operand2,ALUTemp,outTemp,memData;
     insType ins,pc;// pc : address of instruction
@@ -24,15 +23,14 @@ private:
     void getOperand(dataType &operand,int sel);
     void recvData();
     void writeback();
-
-public:
     std::map<addrType,dataType>* DRAM; // dram
     int peType; // pe type
     Pe();
     Pe(int peType,std::map<addrType,dataType>* DRAM);
     void execute();
+    void setCMEM(long ins, int cycle);
     Pe* inE,*inS,*inW,*inN; // Pe link
-    void printExeInfo(std::iostream f);
+    void printExeInfo();
 
 };
 
