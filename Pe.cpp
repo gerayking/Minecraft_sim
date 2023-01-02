@@ -33,7 +33,7 @@ void Pe::getOperand(int &operand,int sel) {
             operand = IMM(ins);
             break;
         case 5:
-            operand = ALUTemp;
+            operand = rf5;
             break;
         case 6:
             operand = SELA(ins);
