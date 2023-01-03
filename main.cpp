@@ -4,8 +4,8 @@
 using namespace std;
 int main() {
 //    freopen("log.txt","w+",stdout);
-    string insfile = "insfile.txt";
-    string memfile = "memfile.txt";
+    string insfile = "../insfile.txt";
+    string memfile = "../memfile.txt";
     CGRA cgrainstance(4,4);
     cgrainstance.printTileLayout();
     cgrainstance.parseInsFile(insfile); // 解析指令文件
